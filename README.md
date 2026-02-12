@@ -60,3 +60,87 @@ Agente avanzado para documentación técnica y funcional:
 ---
 
 # 🏗️ Arquitectura General
+FastAPI (apps/api)
+│
+├── AnalystAgent (packages/analyst-agent)
+├── DataAuditAgent (packages/data-audit-agent)
+└── DocumentationAgent (packages/documentation-agent)
+│
+└── Servicios Comunes (libs/*)
+├── common-db (Postgres RO + guardrails SQL)
+├── common-llm (wrapper universal para cualquier LLM)
+├── common-vectorstore (Chroma / Pinecone)
+├── common-tools (Slack, Gmail, Sheets, Jira)
+└── common-utils (viz, telemetry, security)
+
+---
+
+# 📁 Estructura del Repositorio
+agent-suite/
+│
+├─ apps/
+│  └─ api/
+│     ├─ app/
+│     │  ├─ main.py
+│     │  ├─ settings.py
+│     │  ├─ auth.py
+│     │  ├─ schemas.py
+│     │  ├─ routers/
+│     │  │  ├─ analyst_router.py
+│     │  │  ├─ audit_router.py
+│     │  │  └─ docs_router.py
+│     │  └─ di.py
+│     └─ pyproject.toml
+│
+├─ packages/
+│  ├─ analyst-agent/
+│  ├─ data-audit-agent/
+│  └─ documentation-agent/
+│
+├─ libs/
+│  ├─ common-db/
+│  ├─ common-llm/
+│  ├─ common-vectorstore/
+│  ├─ common-tools/
+│  └─ common-utils/
+│
+├─ fixtures/
+│  └─ dummy_docs/
+│
+├─ infra/
+│  └─ docker/
+│     ├─ Dockerfile
+│     └─ docker-compose.yml
+│
+├─ requirements.txt
+├─ .env.example
+└─ README.md
+
+---
+
+# 🛠️ Tecnologías Principales
+
+- **FastAPI**  
+- **PostgreSQL (read‑only)**  
+- **SQLAlchemy + guardrails SQL**  
+- **Python 3.11+**  
+- **Docker / Docker Compose**  
+- **ChromaDB** (vector store local)  
+- **Slack SDK**  
+- **Gmail API / SMTP**  
+- **matplotlib / plotly**  
+- **OpenTelemetry** (monitoreo)  
+- **Wrapper universal para LLMs** (Gemini → GPT → Claude)
+
+---
+
+# 🔒 Seguridad
+
+- Conexión **Postgres READ-ONLY**.  
+- Rechazo de consultas **DML/DDL**.  
+- `LIMIT` + `TIMEOUT` por defecto.  
+- Solo **plantillas SQL whitelisted**.  
+- Redacción de PII en logs.  
+- Scopes por herramienta.  
+- Tokens solo en `.env`.
+
